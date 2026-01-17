@@ -23,15 +23,13 @@ app = Flask(__name__)
 # EMAIL FUNCTION
 # --------------------
 def send_email(name, email, message):
-    print("DEBUG sender_email:", EMAIL_ADDRESS)
-    print("DEBUG sender_password loaded:", bool(EMAIL_PASSWORD))
-
-    msg = EmailMessage()
-    msg["Subject"] = "New Contact Message"
-    msg["From"] = EMAIL_ADDRESS
-    msg["To"] = EMAIL_ADDRESS
-    msg.set_content(
-        f"""
+    try:
+        msg = EmailMessage()
+        msg["Subject"] = "New Contact Message"
+        msg["From"] = EMAIL_ADDRESS
+        msg["To"] = EMAIL_ADDRESS
+        msg.set_content(
+            f"""
 New message from your portfolio website:
 
 Name: {name}
@@ -40,11 +38,18 @@ Email: {email}
 Message:
 {message}
 """
-    )
+        )
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-        server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-        server.send_message(msg)
+        # IMPORTANT: timeout added
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=10) as server:
+            server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+            server.send_message(msg)
+
+        print("Email sent successfully")
+
+    except Exception as e:
+        # Log error but DO NOT crash the app
+        print("Email failed:", str(e))
 
 # --------------------
 # ROUTES
@@ -75,8 +80,8 @@ def contact():
 
     # Send email notification
     send_email(name, email, message)
-
     return jsonify({"success": True})
+
 
 
 # --------------------
