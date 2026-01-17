@@ -20,8 +20,9 @@ def send_email_background(name, email, message):
     try:
         msg = EmailMessage()
         msg["Subject"] = "New Contact Message"
-        msg["From"] = EMAIL_ADDRESS
-        msg["To"] = EMAIL_ADDRESS
+        msg["From"] = f"Rich Technology <{EMAIL_ADDRESS}>"
+        msg["To"] = "richtech.com@aol.com"
+    
         msg.set_content(
             f"""
 New message from your portfolio website:
