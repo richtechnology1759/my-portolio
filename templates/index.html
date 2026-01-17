@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rich Technology Limited</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    
+</head>
+
+<body>
+
+    <!-- Header / Navigation -->
+    <header>
+        <nav>
+            <h1>Rich Technology Limited</h1>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+
+            <button id="theme-toggle">🌙</button>
+
+        </nav>
+    </header>
+
+    <section id="hero">
+        <div class="hero-box">
+            <img src="{{ url_for('static', filename='images/profile.jpg') }}"
+                 alt="Rich Technology Limited"
+                 class="hero-image">
+    
+            <h1 class="hero-name">Rich Technology Limited</h1>
+    
+            <span class="hero-badge">
+                Software Engineer · Full-Stack Developer · Python Developer
+            </span>
+    
+            <div class="hero-actions">
+                <a href="#contact" class="btn primary-btn">Contact Me</a>
+                <a href="#projects" class="btn secondary-btn">View Projects</a>
+            </div>
+    
+            <p>
+                Building scalable, reliable, and modern web solutions with Python.
+            </p>
+        </div>
+    </section>
+    
+         <!-- CTA BUTTONS -->
+    <div class="hero-actions">
+        <a href="#contact" class="btn primary-btn"></a>
+        <a href="#projects" class="btn secondary-btn">View Projects</a>
+    </div>
+       
+    </section>
+    
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="content-card">
+            <h2>About Me</h2>
+            <p>
+                Rich Technology Limited is a software-focused brand delivering
+                modern web applications, backend systems, and digital solutions.
+            </p>
+        </div>
+    </section>
+    
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="content-card">
+            <h2>Skills</h2>
+            <ul class="skills-list">
+                <li>Python</li>
+                <li>Flask</li>
+                <li>HTML, CSS, JavaScript</li>
+                <li>APIs & Backend Development</li>
+                <li>Database Design</li>
+            </ul>
+        </div>
+    </section>
+    
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <h2>Projects</h2>
+    
+        <div class="projects-grid">
+            <div class="project-card">
+                <h3>Travel Booking Platform</h3>
+                <p>A full-stack travel website with backend logic, routing, and future payment integration.</p>
+            </div>
+    
+            <div class="project-card">
+                <h3>Gift Card E-Commerce</h3>
+                <p>An online platform for selling digital gift cards with secure delivery.</p>
+            </div>
+    
+            <div class="project-card">
+                <h3>Banking Web App</h3>
+                <p>A Python-powered banking interface focused on clean UI and backend structure.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="contact-wrapper">
+    
+            <h3 class="contact-title">Send me a message</h3>
+            <p class="contact-subtitle">
+                Have a project or question? Let’s talk.
+            </p>
+    
+            <p id="form-status"></p>
+    
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+    
+                <button type="submit" class="btn primary-btn">
+                    Send Message
+                </button>
+            </form>
+    
+        </div>
+    </section>
+    
+    
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 Rich Technology Limited. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+
+
+</body>
+</html>
