@@ -1,28 +1,22 @@
 import os
 import smtplib
+import threading
 from email.message import EmailMessage
-
 from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
 
-# --------------------
-# LOAD ENVIRONMENT VARIABLES
-# --------------------
+# Load env vars
 load_dotenv()
-
 
 EMAIL_ADDRESS = os.getenv("EMAIL_ADDRESS")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 
-# --------------------
-# FLASK APP
-# --------------------
 app = Flask(__name__)
 
 # --------------------
-# EMAIL FUNCTION
+# BACKGROUND EMAIL SENDER
 # --------------------
-def send_email(name, email, message):
+def send_email_background(name, email, message):
     try:
         msg = EmailMessage()
         msg["Subject"] = "New Contact Message"
@@ -40,7 +34,6 @@ Message:
 """
         )
 
-        # IMPORTANT: timeout added
         with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=10) as server:
             server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
             server.send_message(msg)
@@ -48,8 +41,7 @@ Message:
         print("Email sent successfully")
 
     except Exception as e:
-        # Log error but DO NOT crash the app
-        print("Email failed:", str(e))
+        print("Email failed:", e)
 
 # --------------------
 # ROUTES
@@ -58,34 +50,33 @@ Message:
 def home():
     return render_template("index.html")
 
-
 @app.route("/contact", methods=["POST"])
 def contact():
-    data = request.get_json()
+    data = request.get_json(silent=True)
+
+    if not data:
+        return jsonify({"success": False}), 400
 
     name = data.get("name")
     email = data.get("email")
     message = data.get("message")
 
     if not name or not email or not message:
-        return jsonify({"success": False, "error": "Missing fields"}), 400
+        return jsonify({"success": False}), 400
 
-    # Save message to file
-    with open("messages.txt", "a", encoding="utf-8") as file:
-        file.write("----- NEW MESSAGE -----\n")
-        file.write(f"Name: {name}\n")
-        file.write(f"Email: {email}\n")
-        file.write(f"Message: {message}\n")
-        file.write("\n")
+    # Start email in background (NON-BLOCKING)
+    thread = threading.Thread(
+        target=send_email_background,
+        args=(name, email, message),
+        daemon=True
+    )
+    thread.start()
 
-    # Send email notification
-    send_email(name, email, message)
+    # IMMEDIATE RESPONSE — no waiting
     return jsonify({"success": True})
 
-
-
 # --------------------
-# RUN APP
+# RUN
 # --------------------
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
